@@ -34,5 +34,6 @@ namespace SalesWeb.Controllers
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
