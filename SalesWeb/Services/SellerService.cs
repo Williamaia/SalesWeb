@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using SalesWeb.Models;
 using SalesWeb.Data;
 using System.Reflection.Metadata.Ecma335;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using SalesWeb.Services.Exceptions;
 
 namespace SalesWeb.Services
 {
@@ -42,6 +43,28 @@ namespace SalesWeb.Services
             _context.SaveChanges();
 
 
+        }
+
+        public void Update(Seller obj)
+        {
+            if(!_context.Seller.Any(x => x.Id == obj.Id))
+            {
+                throw new NotFoundException("Id Not Found");
+            }
+
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+
+            }
+            
+            catch(DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+
+            
         }
     }
 
